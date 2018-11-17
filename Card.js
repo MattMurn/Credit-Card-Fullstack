@@ -12,23 +12,27 @@ module.exports = class Card {
         this.card_tranactions = [];
         this.outstanding_interest = []
     }
-    calc_interest(transaction){
-        let days = Math.floor((new Date() - transaction.trans_time)/1000/60/60/24);
-        transaction.interest_adjusted = Math.round((((this.balance * (this.apr/ 365)) * days))*100)/100;
-    }
-    // check_balance(amount){
-    //     (this.balance + amount > this.limit) ? 
-    //     this.valid_transaction = false : 
-    //     this.valid_transaction = true;
-    // }
-    card_transaction(type, amount, date){
-        let trans_time = date;
+    calc_interest(amount, days) {
+        // console.log(new Date(), transaction.trans_amount);
+        // let days = Math.floor(days);
 
-        if(type === 'charge'){
+        return Math.round((((amount * (this.apr/ 365)) * days))*100)/100;
+    }
+    // method that takes new transactions, creates object, pushes to card_transactions
+    card_transaction(type, amount) {
+        let trans_time = new Date();
+        let is_approved;
+        if(type === 'charge' && (amount + this.balance) < this.limit){
+            is_approved = true;
             this.balance += amount;
         }
         else if(type === 'payment'){
             this.balance -= amount;
+        }
+        else{
+            is_approved = false
+            // set tranaction property to declined.
+            // don't update 
         }
         // let interest_days = this.evaluate_time(trans_time);
         this.card_tranactions.push({
@@ -36,13 +40,28 @@ module.exports = class Card {
             trans_type: type,
             trans_time: trans_time,
             trans_amount: amount,
-            interest_adjusted: null
+            interest_adjusted: null,
+            is_approved: is_approved
+
         });
         if(this.card_tranactions.length){
             this.calc_interest(this.card_tranactions[this.card_tranactions.length-1])
         }
         this.date_last_transaction = trans_time;
         // add payment & charge functionality
+    }
+    get_current_balance() {
+        let date = Math.floor(new Date() - this.start_accrue)/1000/60/60/24;
+        // console.log(date)
+        let interest = this.calc_interest(this.balance, 30)
+        if((30)  % 30 === 0){
+            this.balance = this.balance + interest;
+            return this.balance;
+        }
+        else {
+            return this.balance;
+        }
+        // return this.balance + interest;
     }
     get_trans(){
         return this.card_tranactions;
