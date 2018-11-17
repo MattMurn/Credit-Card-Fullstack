@@ -1,0 +1,23 @@
+{
+  "name": "murnighan_avant_challenge",
+  "version": "1.0.0",
+  "description": "Node application that manages customer / credit card transactions ",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n/a.git"
+  },
+  "author": "Matt Murnighan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/n/a/issues"
+  },
+  "homepage": "https://github.com/n/a#readme",
+  "dependencies": {
+    "inquirer": "^6.2.0",
+    "jest": "^23.6.0"
+  }
+}
