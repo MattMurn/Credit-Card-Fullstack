@@ -9,22 +9,24 @@ let third_transaction_date = new Date("November 12, 2018 15:13:20");
 let check_balance_date = new Date("November 17,2018 15:13:20");
 let saturday = new Date("November 17, 2018 20:00:01");
 let sunday = new Date("November 18, 2018 20:00:01");
-let after_hours = new Date("November 19, 2018 17:00:01");
+let after_hours = new Date("November 19, 2018 18:00:01");
+let friday_after_hours = new Date("November 16, 2018 18:00:01");
+let date_helper = require('./date_helper');
 // let moment_test = moment();
 // Fist Test Scenario
 test('Test scenario 1', ()=> {
     let test_one = new Card(.35, 1000, open_date);
-    test_one.card_transaction('charge', 500, first_transaction_date);
+    test_one.card_swipe('charge', 500, first_transaction_date);
 
-    expect(test_one.get_current_balance(check_balance_date)).toBe(514.38);
+    expect(test_one.get_balance_as_of_date(check_balance_date)).toBe(514.38);
 })
 test(`test scenario 2`, ()=> {
     let test_two = new Card(.35, 1000, open_date);
-    test_two.card_transaction('charge', 500,first_transaction_date);
-    test_two.card_transaction('payment', 200, second_transaction_date);
-    test_two.card_transaction('charge', 100, third_transaction_date);
+    test_two.card_swipe('charge', 500,first_transaction_date);
+    test_two.card_swipe('payment', 200, second_transaction_date);
+    test_two.card_swipe('charge', 100, third_transaction_date);
 
-    expect(test_two.get_current_balance(check_balance_date)).toBe(411.99);
+    expect(test_two.get_balance_as_of_date(check_balance_date)).toBe(411.99);
 })
 // interest tests;
 test('test calc_interest method', () => {
@@ -35,32 +37,29 @@ test('test calc_interest method', () => {
 })
 // limit test 
 test('test if charges can be made that exceed credit limit', ()=> {
-    new_card.card_transaction('charge', 1300, new Date());
-    expect(new_card.get_current_balance()).toEqual(0)
-    expect(new_card.card_tranactions[0].swip_approved).toBe(false)
+    new_card.card_swipe('charge', 1300, new Date());
+    expect(new_card.get_balance_as_of_date()).toEqual(0)
+    expect(new_card.swipe_history[0].swipe_approved).toBe(false)
 })
 // transaction tests;
-test('check for past transactions', ()=> {
-    // expect(new_card.get_current_balance()).toBe(0);
-    new_card.card_transaction('charge', 500);
-    expect(new_card.get_trans().length).toBe(2);
-})
-// test('reducer method to get difference in days between transactions',()=> {
-//     new_card.card_transaction('charge', 500, new Date(2018, 9, 18, 10, 33, 30, 0));
-//     new_card.card_transaction('payment', 200, new Date(2018, 10, 2, 10, 33, 30, 0));
-//     new_card.card_transaction('charge', 100, new Date(2018, 10, 12, 10, 33, 30, 0));
-//     new_card.get_current_balance();
+// test('check for past transactions', ()=> {
+//     // expect(new_card.get_balance_as_of_date()).toBe(0);
+//     new_card.card_swipe('charge', 500);
+//     expect(new_card.get_trans().length).toBe(2);
 // })
-// weekend post test / moment v Date() object
-// test('is swip_day on the weekend', ()=> {
-//     expect(new_card.moment(moment_test.day())).toBe(true);
-// });
-test('is swip_day on the weekend', ()=> {
-    expect(new_card.check_swip_day(saturday)).toBe(1);    
+
+test('Saturday card_swipe', ()=> {
+    expect(date_helper.check_swipe_post_date(saturday)).toEqual(new Date('2018-11-20T06:00:00.001Z'));    
 });
-test('is swip_day on the weekend', ()=> {
-    expect(new_card.check_swip_day(sunday)).toBe(1);    
+test('Sunday card_swipe', ()=> {
+    expect(date_helper.check_swipe_post_date(sunday)).toEqual(new Date('2018-11-20T06:00:00.001Z'));    
 });
-test('is swip occuring during bank hours', ()=> {
-    expect(new_card.check_swip_time(after_hours)).toBe('2018-11-20T02:00:01.000Z');
+test('bank after_hours card_swipe', ()=> {
+    expect(date_helper.check_swipe_post_date(after_hours)).toEqual(new Date('2018-11-20T06:00:00.001Z'));    
+});
+test('during business hours card_swipe', () => {
+    expect(date_helper.check_swipe_post_date(new Date("November 20, 2018 08:00:01"))).toEqual(new Date("November 20, 2018 08:00:01"))
+})
+test('Friday after-hours card_swipe', ()=> {
+    expect(date_helper.check_swipe_post_date(friday_after_hours)).toEqual(new Date(friday_after_hours));
 })
