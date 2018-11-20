@@ -10,20 +10,16 @@ Date.prototype.adjust_from_GMT = function(time_diff){
 module.exports= {
     check_transaction_post_date: function(transaction_date) {
         if(transaction_date.getDay() === 5 && transaction_date.getHours() >= 17){
-            transaction_date.adjust_day(3);
-            return transaction_date;
+            return transaction_date.adjust_day(3);
         }        
         else if(transaction_date.getDay() === 6){
-            transaction_date.adjust_day(2);
-            return transaction_date;
+            return transaction_date.adjust_day(2);
         }
         else if(transaction_date.getDay() === 0){
-            transaction_date.adjust_day(1);
-            return transaction_date;
+            return transaction_date.adjust_day(1);
         }
         else if(transaction_date.getHours() >= 17){
-            transaction_date.adjust_day(0);
-            return transaction_date;
+            return transaction_date.adjust_day(0);
         }
         else {
             return transaction_date;

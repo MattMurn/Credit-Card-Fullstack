@@ -1,45 +1,29 @@
+/* 
+create a test suite that does the following:
+takes in the Avant challenges transactions with fixed dates
++++
+check balance after 35 days. 
+make another transaction after 40 days.
+check balance at 45 days
+check balance at 60 days 
+check balance at 65 days
+*/
+let day_35 = new Date("November 22,2018 15:13:20"); // 35 days
+let day_40 = new Date("December 2,2018 15:13:20"); //45 days
+let day_60 = new Date("December 22,2018 15:13:20"); //60 days
+let day_65 = new Date("December 27, 2018 15:13:20") //65 days
 
-//Other test suites 
-// let saturday = new Date("November 17, 2018 20:00:01");
-// let sunday = new Date("November 18, 2018 20:00:01");
-// let after_hours = new Date("November 19, 2018 18:00:01");
-// let friday_after_hours = new Date("November 16, 2018 18:00:01");
-// let date_helper = require('./date_helper');
-
-// test('30 + days balance', () => {
-//     let test_three = new Card(.35, 1000, open_date);
-//     test_three.card_swipe('charge', 800, open_date)
-//     expect(test_three.get_balance_as_of_date(new Date("November 19, 2019 18:00:01"))).toBe(1000)
-// })
-// // interest tests;
-// test('test calc_interest method', () => {
-//     expect(new_card.calc_interest(500, 30)).toEqual(14.38);
-//     expect(new_card.calc_interest(500, 15)).toEqual(7.19);
-//     expect(new_card.calc_interest(300, 10)).toEqual(2.88);
-//     expect(new_card.calc_interest(400, 5)).toBe(1.92)
-// })
-// // limit test 
-// test('charges cannot be made that exceed credit limit', ()=> {
-//     new_card.card_swipe('charge', 1300, new Date());
-//     expect(new_card.get_balance_as_of_date()).toEqual(0)
-//     expect(new_card.swipe_history[0].swipe_approved).toBe(false)
-// })
-// test('payments cannot exceed current balance', ()=> {
-//     new_card
-// })
-// // non business hour card_swipes
-// test('Saturday card_swipe', ()=> {
-//     expect(date_helper.check_swipe_post_date(saturday)).toEqual(new Date('2018-11-20T06:00:00.001Z'));    
-// });
-// test('Sunday card_swipe', ()=> {
-//     expect(date_helper.check_swipe_post_date(sunday)).toEqual(new Date('2018-11-20T06:00:00.001Z'));    
-// });
-// test('bank after_hours card_swipe', ()=> {
-//     expect(date_helper.check_swipe_post_date(after_hours)).toEqual(new Date('2018-11-20T06:00:00.001Z'));    
-// });
-// test('during business hours card_swipe', () => {
-//     expect(date_helper.check_swipe_post_date(new Date("November 20, 2018 08:00:01"))).toEqual(new Date("November 20, 2018 08:00:01"))
-// })
-// test('Friday after-hours card_swipe', ()=> {
-//     expect(date_helper.check_swipe_post_date(friday_after_hours)).toEqual(new Date(friday_after_hours));
-// })
+test('see above', ()=> {
+    let test_two = new Card(.35, 1000, open_date);
+    test_two.card_transaction('charge', 500,open_date);
+    expect(test_two.get_balance_as_of_date(second_transaction_date)).toBe(500);
+    test_two.card_transaction('payment', 200, second_transaction_date);
+    expect(test_two.get_balance_as_of_date(third_transaction_date)).toBe(300);
+    test_two.card_transaction('charge', 100, third_transaction_date);
+    expect(test_two.get_balance_as_of_date(check_balance_date)).toBe(411.99);
+    expect(test_two.get_balance_as_of_date(day_35)).toBe(411.99);
+    test_two.card_transaction('charge', 300, day_40);
+    expect(test_two.check_balance_date(day_45)).toBe(411.99);
+    expect(test_two.check_balance_date(day_60)).toBe('calc interest');
+    expect(test_two.check_balance_date(day_65)).toBe('same as day 60');
+})
