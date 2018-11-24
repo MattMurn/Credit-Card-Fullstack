@@ -37,15 +37,22 @@ module.exports = class Card {
             interest_accrued: 0,
             transaction_approved: transaction_approved
         });
+        console.log(this.transaction_history);
     }
     get_balance_as_of_date(as_of_date=new Date()) {
+        // get transaction range - asking date - the first element in array.
+        // console.log(this.transaction_history[0])
         let transaction_range = date_helper.convert((as_of_date - this.transaction_history[0].transaction_timestamp)); 
-        if((transaction_range) % 30 === 0 || transaction_range > 30){
+        // range is divisble / greater than 30, call reducer, archive transactions, return balance.
+        // if((transaction_range) % 30 === 0 || transaction_range > 30){
+            if(transaction_range >= 30 || (transaction_range) % 30 === 0){
             this.balance += this.interest_reducer(as_of_date);
             this.archive_transactions(as_of_date);
+            // console.log(this.balance);
             return this.balance;
         }
-        else {
+        else { // or return balance.
+            // console.log(this.balance);
             return this.balance;
         }
     }
@@ -71,9 +78,21 @@ module.exports = class Card {
         })
         this.transaction_history = [{ 
             transaction_id: Math.random(),
+            transaction_type: 'archive',
             transaction_timestamp: as_of_date,
-            transaction_current_balance: this.balance
+            post_date: as_of_date,
+            current_balance: this.balance,
+            interest_accrued: 0,
+            transaction_approved: null
         }] 
         this.month ++;
     }
 }
+// transaction_id: Math.random(),
+// transaction_type: type,
+// transaction_timestamp: date,
+// post_date: date_helper.check_transaction_post_date(date),
+// transaction_amount: amount,
+// current_balance: this.balance,
+// interest_accrued: 0,
+// transaction_approved: transaction_approved
