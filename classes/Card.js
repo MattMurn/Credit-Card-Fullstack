@@ -2,7 +2,8 @@ let date_helper = require('./date_helper');
 let mock_db = require('../mock_db');
 
 module.exports = class Card {
-    constructor(apr, credit_limit, open_date=new Date(), customer_id=null,){
+    constructor(apr, credit_limit, open_date=new Date(), customer_id){
+        this.customer_id = customer_id
         this.apr = apr;
         this.credit_limit= credit_limit;
         this.customer_id = customer_id;

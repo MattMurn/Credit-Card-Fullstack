@@ -1,27 +1,30 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Cards', {
+    return queryInterface.createTable('transactions', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      customer_id: {
+      card_id: {
         type: Sequelize.INTEGER
       },
-      apr: {
+      transaction_id: {
         type: Sequelize.FLOAT
       },
-      credit_limit: {
-        type: Sequelize.FLOAT
+      transaction_type: {
+        type: Sequelize.STRING
       },
-      current_balance: {
-        type: Sequelize.FLOAT
+      transaction_timestamp: {
+        type: Sequelize.STRING
       },
-      interest_accrued: {
-        type: Sequelize.FLOAT
+      post_date: {
+        type: Sequelize.STRING
+      },
+      transaction_approved: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -34,6 +37,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Cards');
+    return queryInterface.dropTable('transactions');
   }
 };

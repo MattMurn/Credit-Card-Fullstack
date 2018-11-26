@@ -2,7 +2,7 @@
   "name": "murnighan_avant_challenge",
   "version": "1.0.0",
   "description": "Node application that manages customer / credit card transactions ",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "jest"
   },
