@@ -1,6 +1,6 @@
-const Customer = require('./Customer');
-const Card = require('./Card');
-const mock_db = require('./mock_db');
+const Customer = require('../classes/Customer');
+const Card = require('../classes/Card');
+const mock_db = require('../mock_db');
 let open_date = new Date("October 18, 2018 11:13:00");
 let second_transaction_date = new Date("November 2, 2018 15:13:20");
 let third_transaction_date = new Date("November 12, 2018 15:13:20");

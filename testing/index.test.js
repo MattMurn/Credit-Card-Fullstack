@@ -1,4 +1,4 @@
-const Card = require('./Card');
+const Card = require('../classes/Card');
 // new_card with 35% apr, 1000 limit, created on 9/17/18;
 // test data
 // I set this up using the Date() object. Didn't want to use an api.
