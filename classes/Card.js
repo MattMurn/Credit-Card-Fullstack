@@ -5,6 +5,7 @@ module.exports = class Card {
     constructor(apr, credit_limit, open_date=new Date(), customer_id){
         this.customer_id = customer_id
         this.apr = apr;
+        this.card_id = Math.floor(Math.random() * Math.floor(10));
         this.credit_limit= credit_limit;
         this.customer_id = customer_id;
         this.open_date = open_date;
@@ -29,6 +30,8 @@ module.exports = class Card {
             transaction_approved = false;
         }
         this.transaction_history.push({
+            customer_id: this.customer_id,
+            card_id: this.card_id,
             transaction_id: Math.random(),
             transaction_type: type,
             transaction_timestamp: date,

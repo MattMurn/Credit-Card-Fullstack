@@ -6,6 +6,9 @@ module.exports = (sequelize, DataTypes) => {
     transaction_type: DataTypes.STRING,
     transaction_timestamp: DataTypes.STRING,
     post_date: DataTypes.STRING,
+    transaction_amount: DataTypes.FLOAT,
+    current_balance: DataTypes.FLOAT,
+    interest_accrued: DataTypes.FLOAT,
     transaction_approved: DataTypes.STRING
   }, {});
   Transactions.associate = function(models) {
