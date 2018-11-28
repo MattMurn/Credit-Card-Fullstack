@@ -23,6 +23,15 @@ module.exports = {
       post_date: {
         type: Sequelize.STRING
       },
+      transaction_amount: {
+        type: Sequelize.FLOAT
+      },
+      current_amount: {
+        type: Sequelize.FLOAT
+      },
+      interest_accrued: {
+        type: Sequelize.FLOAT
+      },
       transaction_approved: {
         type: Sequelize.STRING
       },

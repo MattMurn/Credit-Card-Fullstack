@@ -14,8 +14,7 @@ let open_date = new Date("October 18, 2018 11:13:00");// 0 days
 let second_transaction_date = new Date("November 2, 2018 15:13:20"); // 15 days
 let third_transaction_date = new Date("November 12, 2018 15:13:20"); // 25 days
 let check_balance_date = new Date("November 17,2018 15:13:20"); // 30 days
-
-
+// create card, transaction, check balance
 let first_card = new Card(.35, 1000, new Date(), 3);
 first_card.card_transaction('charge', 500, open_date);
 first_card.get_balance_as_of_date(check_balance_date);
@@ -51,7 +50,7 @@ send_transaction_history = array => {
     })
   })
 }
-
+// calling this function not return data for instance
 send_transaction_history(first_card.transaction_history);
 // console.log(get_by_id('3'));
 db.sequelize.sync({force:false})
