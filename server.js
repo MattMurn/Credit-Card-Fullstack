@@ -14,7 +14,11 @@ let open_date = new Date("October 18, 2018 11:13:00");// 0 days
 let second_transaction_date = new Date("November 2, 2018 15:13:20"); // 15 days
 let third_transaction_date = new Date("November 12, 2018 15:13:20"); // 25 days
 let check_balance_date = new Date("November 17,2018 15:13:20"); // 30 days
+<<<<<<< HEAD
 
+=======
+// create card, transaction, check balance
+>>>>>>> ccea2098ded6acbecb654744bb6166c17672463e
 let first_card = new Card(.35, 1000, new Date(), 3);
 
 create_new_card = instance => {
@@ -46,6 +50,7 @@ send_transaction_history = array => {
     })
   })
 }
+<<<<<<< HEAD
 // get customer data;
 // get card(s);
 // get transaction(s);
@@ -78,6 +83,10 @@ get_customer_info = (first, last) => {
     })
 }
 
+=======
+// calling this function not return data for instance
+send_transaction_history(first_card.transaction_history);
+>>>>>>> ccea2098ded6acbecb654744bb6166c17672463e
 // console.log(get_by_id('3'));
 db.sequelize.sync({force:false})
 .then(() => {

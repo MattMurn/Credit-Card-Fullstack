@@ -43,13 +43,8 @@ module.exports = class Card {
         });
     }
     get_balance_as_of_date(as_of_date=new Date()) {
-        // get transaction range - asking date - the first element in array.
-        // console.log(this.transaction_history[0])
         let transaction_range = date_helper.convert((as_of_date - this.transaction_history[0].transaction_timestamp)); 
-        // range is divisble / greater than 30, call reducer, archive transactions, return balance.
-        // if((transaction_range) % 30 === 0 || transaction_range > 30){
-            // console.log(transaction_range)
-            if(transaction_range >= 30 || transaction_range % 30 === 0){
+        if(transaction_range >= 30 || transaction_range % 30 === 0){
             this.balance += this.interest_reducer(as_of_date);
             this.archive_transactions(as_of_date);
             // console.log(this.balance);
@@ -65,7 +60,7 @@ module.exports = class Card {
             let next_transaction_date;
             if(i === this.transaction_history.length-1){
                 next_transaction_date = as_of_date;
-            }
+            } 
             else { 
                 next_transaction_date = this.transaction_history[i+1].transaction_timestamp;
             }
