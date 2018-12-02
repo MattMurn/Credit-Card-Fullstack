@@ -15,12 +15,8 @@ let second_transaction_date = new Date("November 2, 2018 15:13:20"); // 15 days
 let third_transaction_date = new Date("November 12, 2018 15:13:20"); // 25 days
 let check_balance_date = new Date("November 17,2018 15:13:20"); // 30 days
 
-
 let first_card = new Card(.35, 1000, new Date(), 3);
-first_card.card_transaction('charge', 500, open_date);
-first_card.get_balance_as_of_date(check_balance_date);
 
-console.log(first_card.card_id);
 create_new_card = instance => {
 
   db.cards.create({
@@ -33,14 +29,13 @@ create_new_card = instance => {
     createdAt: instance.open_date
   })
 }
-create_new_card(first_card);
 send_transaction_history = array => {
 
   array.map((element, i)=> {
-    -
+      // console.log(element);
     db.transactions.create({
       transaction_id: element.transaction_id,
-      card_id: element.customer_id,
+      card_id: element.card_id,
       transaction_type: element.transaction_type,
       transaction_timestamp: element.transaction_timestamp.toString(),// from Date obj
       post_date: element.post_date.toString(),// from Date obj
@@ -51,8 +46,38 @@ send_transaction_history = array => {
     })
   })
 }
+// get customer data;
+// get card(s);
+// get transaction(s);
+// try to set this up so that w/ minimal nested promises.
+get_card_info = id => {
+  db.cards.findAll({
+    where:{
+      customer_id: id
+    }
+  })
+  .then(data => {
+    let cards = {};
+    data.map((element, i)=> {
+      cards[i] = element;
+    })
+    console.log(cards);
+    return cards;
+  })
+}
+get_customer_info = (first, last) => {
+  db.customers.findAll({
+    where: {
+      first_name: first,
+      last_name: last
+    }
+  })
+  .then(data => {
+    console.log(data[0].dataValues.id)
+    return get_card_info(data[0].dataValues.id.toString());
+    })
+}
 
-send_transaction_history(first_card.transaction_history);
 // console.log(get_by_id('3'));
 db.sequelize.sync({force:false})
 .then(() => {
@@ -60,3 +85,11 @@ db.sequelize.sync({force:false})
     console.log(`🌎 ==> Server now on port ${PORT}!`);
   });
 }) 
+
+create_new_card(first_card);
+first_card.card_transaction('charge', 500, open_date);
+first_card.card_transaction('payment', 300, second_transaction_date);
+send_transaction_history(first_card.transaction_history);
+first_card.get_balance_as_of_date(check_balance_date);
+// console.log(get_customer_info('Abby', 'Rose'));
+// get_card_info(get_customer_info('Abby', 'Rose'));

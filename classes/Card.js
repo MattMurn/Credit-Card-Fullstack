@@ -52,11 +52,11 @@ module.exports = class Card {
             if(transaction_range >= 30 || transaction_range % 30 === 0){
             this.balance += this.interest_reducer(as_of_date);
             this.archive_transactions(as_of_date);
-            console.log(this.balance);
+            // console.log(this.balance);
             return this.balance;
         }
         else {
-            console.log(this.balance);
+            // console.log(this.balance);
             return this.balance;
         }
     }
@@ -79,10 +79,11 @@ module.exports = class Card {
     }
     archive_transactions(as_of_date= new Date()){
         // map transaction to mock database / JSON object
-        this.transaction_history.map((element, i) => {
-            mock_db.mock_cards[`${this.transaction_batch}.${i}`] = element;
-        })
+        // this.transaction_history.map((element, i) => {
+        //     mock_db.mock_cards[`${this.transaction_batch}.${i}`] = element;
+        // })
         this.transaction_history = [{ 
+            card_id: this.card_id,
             transaction_id: Math.random(),
             transaction_type: 'archive',
             transaction_timestamp: as_of_date,
