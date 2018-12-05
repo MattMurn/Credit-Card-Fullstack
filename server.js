@@ -15,8 +15,8 @@ let open_date = new Date("October 18, 2018 11:13:00");// 0 days
 let second_transaction_date = new Date("November 2, 2018 15:13:20"); // 15 days
 let third_transaction_date = new Date("November 12, 2018 15:13:20"); // 25 days
 let check_balance_date = new Date("November 17,2018 15:13:20"); // 30 days
-
-let first_card = new Card(.35, 1000, new Date(), 3);
+ 
+let first_card = new Card(.35, 1000, new Date(), 2);
 query_functions.create_new_card(first_card);
 first_card.card_transaction('charge', 500, open_date);
 first_card.card_transaction('payment', 300, second_transaction_date);
@@ -25,23 +25,14 @@ first_card.get_balance_as_of_date(check_balance_date);
 // console.log(query_functions.get_customer_info("Michael", "Conners"));
 // query_functions.get_card_info(user_id);
 let user_id;
-get_customer_info = (first, last) => {
-  db.customers.findAll({
-  where: {
-    first_name: first,
-    last_name: last
-  }
-})  
-.then(function(data){
-  //   console.log(data[0].dataValues.id); 
-  // let test = data[0].dataValues.id;
-    
-    user_id = data[0]
-    console.log(user_id);
-    return user_id;
-  })
-}
-console.log(get_customer_info('Michael', 'Conenrs'))
+
+query_functions.get_customer_info('Abby', 'Rose')
+// console.log(user_id)
+setTimeout(() => {
+
+  // query_functions.get_customer_info('Abby', 'Rose');
+  // query_functions.get_customer_info('Michael', 'Conners')
+}, 2000);
 
 db.sequelize.sync({force:false})
 .then(() => {

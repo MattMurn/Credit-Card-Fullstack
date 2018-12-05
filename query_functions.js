@@ -1,7 +1,8 @@
 const db = require('./sequelize/models');
-// get customer data;
-// get card(s);
-// get transaction(s);
+/*
+create_new_costumer, create_new_card,
+send_transaction_history, get_customer_info
+*/
 module.exports = {
 user_id: null,
 create_new_customer: instance => {
@@ -37,36 +38,29 @@ send_transaction_history: array => {
     })
   })
 },
-get_card_info: id => {
-    db.cards.findAll({
-        where: {
-          customer_id: id
-        }
-    })
-    .then(data => { //this context is always going to be module.exports
-    module.exports.loop_over_response(data);
-    })
-},
 get_customer_info: (first, last) => {
-    db.customers.findAll({
+  return db.customers.findAll({
     where: {
       first_name: first,
       last_name: last
     }
   })  
-  .then(function(data){
-    //   console.log(data[0].dataValues.id); 
-    // let test = data[0].dataValues.id;
-      user_id = data[0].dataValues.id
-      return user_id;
+  .then(data => {
+    return data[0].dataValues.id;
+  })
+  .then(user_id => {
+    return db.cards.findAll({
+      where: {
+        customer_id: user_id
+      }
+    });
+  })
+  .then(card_data => {
+    let cards = {}
+    card_data.map((element, i)=> {
+      cards[i] = element.dataValues; 
     })
-},
-loop_over_response: db_array => {
-    let cards = {};
-    db_array.map((element, i)=> { 
-      cards[i] = element.dataValues;  
-    })
-    // console.log(cards);
     return cards;
-  },
+  })
+}
 }
