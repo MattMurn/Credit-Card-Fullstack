@@ -1,4 +1,4 @@
-const db = require('./sequelize/models');
+const db = require('../model/sequelize/models');
 /*
 create_new_costumer, create_new_card,
 send_transaction_history, get_customer_info
@@ -60,7 +60,27 @@ get_customer_info: (first, last) => {
     card_data.map((element, i)=> {
       cards[i] = element.dataValues; 
     })
+    // console.log(cards)
     return cards;
   })
+},
+get_transactions: id => {
+  return db.transactions.findAll({
+    where: {
+      card_id: id
+    }
+  })
+  .then(transactions => {
+    let log = {};
+    transactions.map((element, i)=> {
+      log[i] = element.dataValues;
+    })
+    console.log(log);
+    return log;
+  })
+  /*
+  this should be used only when a user wants to see transactions
+  after clicking through a on a certain card.
+  */
 }
 }
