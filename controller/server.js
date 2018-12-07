@@ -5,10 +5,11 @@ const app = express();
 const path = require('path');
 const bodyParser = require('body-parser')
 const db = require('../model/sequelize/models');
-const PORT = 3000;
+const PORT = 3001;
 const query_functions = require('./query_functions');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 let open_date = new Date("October 18, 2018 11:13:00");// 0 days
 let second_transaction_date = new Date("November 2, 2018 15:13:20"); // 15 days

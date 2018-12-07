@@ -1,8 +1,13 @@
-import React, { Component } from 'react';
-
-const Sidebar = () => {
+import React from 'react';
+import '../../App.css'
+const Sidebar = props => {
     return (
-        <div> Hello from the sidebar</div>
+
+        <div className="sidebar">
+            <h1> Users</h1>
+            {props.children}
+        </div>
+
     )
 }
 
