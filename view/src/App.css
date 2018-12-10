@@ -25,3 +25,26 @@
 h1 {
   text-align: center;
 }
+.model_show {
+  position: relative;
+  color: black;
+  background: white;
+  height: 400px;
+  width: 500px;
+  margin: auto;
+}
+#outer_id {
+  z-index: 101;
+  opacity: .5;
+  background: pink;
+
+}
+.model_hide {
+  position: relative;
+  opacity: 0;
+  top: -1000px;
+}
+.inputs {
+  position: relative;
+  float: left;
+}
