@@ -10,5 +10,4 @@ const Jumbotron = props => {
             </div>
     )
 }
-
 export default Jumbotron;

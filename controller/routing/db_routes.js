@@ -19,13 +19,23 @@ module.exports = app => {
       }
     })
     .then( data => res.send(data));
-    // res.send('Thanks for sending...')
-    // db.cards.findAll({
+  })
+  app.post('/cardTransactions', (req, res) => {
+    console.log(req.body)
+    // db.transactions.findAll({
     //   where: {
-    //     customer_id: req.body
-    //   } 
+    //     customer_id: 
+    //   }
     // })
-    // .then(data => console.log(data));
+  })
+  app.post('/createCustomer', (req, res) => {
+    console.log(req.body)
+    db.customers.create({
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      credit_score: req.body.credit_score
+    })
+    .then(data => res.send('success'))
   })
 }
 

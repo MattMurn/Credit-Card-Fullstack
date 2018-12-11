@@ -23,9 +23,6 @@ first_card.card_transaction('payment', 300, second_transaction_date);
 query_functions.send_transaction_history(first_card.transaction_history);
 first_card.get_balance_as_of_date(check_balance_date);
 
-// query_functions.get_customer_info('Abby', 'Rose')
-// need to pass a string.
-// query_functions.get_transactions(toString(3));
 
 require('./routing/db_routes')(app);
 
@@ -38,14 +35,3 @@ db.sequelize.sync({force:false})
     console.log(`🌎 ==> Server now on port ${PORT}!`);
   });
 }) 
-
-
-// for(let i = 10; i > 0; i--){
-//   console.log(i);
-// }
-
-// function recursive(num){
-//   (num === 0) ? 0 : recursive(num -1);
-// }
-
-// console.log(recursive(10));
