@@ -1,14 +1,20 @@
+body {
+  background: black;
+}
 .users {
   float: left;
   width: 80%;
 }
 .navbar {
+  position: fixed;
   width: 100%;
   height: 100px;
   background: fuchsia;
+  z-index: 100;
 }
 .sidebar {
   position: fixed;
+  top: 100px;
   width: 200px;
   height: 100%;
   margin: auto;
@@ -16,10 +22,14 @@
   float: left;  
 }
 .jumbotron {
+  display: inline-flex;
+  position: relative;
+  top: 100px;
+  left: 205px;
   float: left;
   background: black;
   height: 800px;
-  width: 100%;
+  max-width: 1200px;
   color: white;
 }
 h1 {
@@ -47,4 +57,20 @@ h1 {
 .inputs {
   position: relative;
   float: left;
+}
+.cards {
+  position: relative;
+  margin: auto;
+  width: 400px;
+}
+.card_details {
+  display: inline-block;
+  background: darkgoldenrod;
+  width: 300px;
+  height: 200px;
+  margin: 5px;
+  clear: both;
+}
+.welcome {
+  text-align: center;
 }

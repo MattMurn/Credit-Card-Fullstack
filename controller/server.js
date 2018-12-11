@@ -26,7 +26,12 @@ first_card.get_balance_as_of_date(check_balance_date);
 // query_functions.get_customer_info('Abby', 'Rose')
 // need to pass a string.
 // query_functions.get_transactions(toString(3));
+
 require('./routing/db_routes')(app);
+
+app.get('*', (req, res) => {
+  res.sendfile(__dirname + '../view/client/build/index.html')
+})
 db.sequelize.sync({force:false})
 .then(() => {
   app.listen(PORT, () =>{

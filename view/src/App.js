@@ -4,68 +4,68 @@ import './App.css';
 import Sidebar from './components/sidebar';
 import Jumbotron from './components/jumbotron';
 import Model from './components/model';
+import Axios from 'axios';
+import CardDetails from './components/cardDetails';
 class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      users: ["Matt Murnighan", "Abby Rose", "Mitchell Ness", "Hater Aid"],
-      name: '',
+      users: [],
       model_class: 'model_hide',
       new_customer: null,
-      create_type: null
+      name: null,
+      current_user: {},
+      cards: []
     }
   }
-  componentDidMount = () => {
-    // this.get_user_data();
+  componentWillMount = () => {
+    Axios.get('/allUsers').then(data => this.setState({users: data.data}))
   }
-  componentWillUpdate = () => {
-    // this.model_toggle();
+  get_card_data = (id) => {
+    Axios.post('/userCards', id)
+    .then(res => {
+      let card_array = res.data;
+      console.log(card_array);
+      this.setState({cards: card_array})
+    })
+    // console.log(this.state.current_user)
   }
   jumbotronAction = event => {   
-    event.preventDefault();
-    this.setState({name: event.target.value})
-    // const { name, value } = event.target;
-    console.log(this.state.name);
-    // this.setState({new_customer: value});
+    let local_user = this.state.users[event.target.name];
+    this.setState({current_user: local_user});
+    this.setState({name: ` Welcome, ${local_user.first_name}`})
+    this.get_card_data(this.state.users[event.target.name]);
   }
-  model_toggle = () => {
+  modelToggle = () => {
     let { model_class } = this.state;
     return (model_class === 'model_hide') ? this.setState({model_class: 'model_show'}) : this.setState({model_class: 'model_hide'})
-
-  }
-  add_new_customer = event => {
-    this.model_toggle();
-    console.log(event.target)
-    //get 
-  }
-  data_change = event => {
-    const { name, value } = event.target;
-    (this.setState({ [name]: value}))
-    console.log(this.state.test)
   }
   render() {
     return (
       <div className="App">
         <Navbar update_click={this.model_toggle}/>
         <Sidebar onClick={()=> this.setState({model_class: 'model_hide'})}>
-          {this.state.users.map((name,i) => {
+          {this.state.users.map((obj,i) => {
             return (
-              <button className="users" type="sumbit" key={i} name="test" value={name} onClick={this.jumbotronAction}>
-                {name}
+              <button className="buttons users customers" type="sumbit"
+               key={i} name={i} value={obj.first_name + " " + obj.last_name} onClick={this.jumbotronAction}>
+                {obj.first_name + " " + obj.last_name}
               </button>
             )
           })}
         </Sidebar>
 
-        <Jumbotron>
+        <Jumbotron name={this.state.name}
+          cards={this.state.cards.map((data, i)=> {
+            return <CardDetails card_id={i}
+                    balance={data.current_balance}
+                    limit={data.credit_limit}
+                    key={i}/>
+          })}>
           <Model class_={this.state.model_class}
                   button_click={this.add_new_customer}
-                  // model_close={this.model_toggle}
-                  name={this.state.name}
                   />
-          <div className="current_user"></div>
         </Jumbotron>
-
       </div>
     );
   }

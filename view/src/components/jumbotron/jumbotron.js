@@ -2,10 +2,12 @@ import React from 'react';
 
 const Jumbotron = props => {
     return (
-        <div className="jumbotron">
-            <h1> Welcome to Credit Card module, {props.name}</h1>
-            {props.children}
-        </div>
+            <div className="jumbotron">
+                <h1 className="welcome"> {props.name}</h1>
+                <div className="card_display">
+                    {props.cards}
+                </div>                
+            </div>
     )
 }
 
