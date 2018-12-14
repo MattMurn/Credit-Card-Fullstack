@@ -1,7 +1,7 @@
 body {
   background: black;
 }
-.users {
+.customers {
   float: left;
   width: 80%;
 }
@@ -79,4 +79,10 @@ h1 {
   position: relative;
   display: inherit;
   top: 150px;
+}
+.trans_hide {
+  opacity: 0;
+}
+.card_hide {
+  opacity: 0;
 }

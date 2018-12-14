@@ -1,5 +1,5 @@
 import React from 'react';
-
+import '../App.css';
 const CardDetails = props => {
     return (
         <div className="card_details">

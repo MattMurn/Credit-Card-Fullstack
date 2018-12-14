@@ -4,8 +4,8 @@ create_new_costumer, create_new_card,
 send_transaction_history, get_customer_info
 */
 module.exports = {
-  user_id: null,
   create_new_customer: instance => {
+    // console.log(instance)
       db.customers.create({
           first_name: instance.first_name,
           last_name: instance.last_name,
@@ -38,31 +38,12 @@ module.exports = {
       })
     })
   },
-  get_customer_info: (first, last) => {
-    return db.customers.findAll({
+  get_card_data: id => {
+    return db.cards.findAll({
       where: {
-        first_name: first,
-        last_name: last
+        customer_id: id
       }
-    })  
-    .then(data => {
-      return data[0].dataValues.id;
-    })
-    .then(user_id => {
-      return db.cards.findAll({
-        where: {
-          customer_id: user_id
-        }
-      });
-    })
-    .then(card_data => {
-      let cards = {}
-      card_data.map((element, i)=> {
-        cards[i] = element.dataValues; 
-      })
-      // console.log(cards)
-      return cards;
-    })
+    });
   },
   get_transactions: id => {
     return db.transactions.findAll({
@@ -83,11 +64,12 @@ module.exports = {
     after clicking through a on a certain card.
     */
   },
-  get_all_users: () => {
+  get_all_customers: () => {
     return db.customers.findAll({})
     .then(customers => {
       let all_customers = []
       customers.map((el, i)=> all_customers.push(el))
+      console.log(all_customers)
       return all_customers;
     });
   }
