@@ -4,7 +4,7 @@ const Sidebar = props => {
     return (
 
         <div className="sidebar" onClick={props.onClick}>
-            <h1> Users</h1>
+            <h1> Customers</h1>
             {props.children}
         </div>
 

@@ -16,7 +16,7 @@ module.exports = app => {
 
   })
   app.post('/currentAction', (req, res) => {
-    console.log(req.body.model_type);
+    // console.log(req.body.model_type);
     let action_check = req.body;
     switch(action_check.model_type){
       case 'new_customer':

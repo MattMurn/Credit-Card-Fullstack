@@ -1,11 +1,7 @@
 const db = require('../model/sequelize/models');
-/*
-create_new_costumer, create_new_card,
-send_transaction_history, get_customer_info
-*/
+
 module.exports = {
   create_new_customer: instance => {
-    // console.log(instance)
       db.customers.create({
           first_name: instance.first_name,
           last_name: instance.last_name,
@@ -56,7 +52,7 @@ module.exports = {
       transactions.map((element, i)=> {
         log[i] = element.dataValues;
       })
-      console.log(log);
+      // console.log(log);
       return log;
     })
     /*
