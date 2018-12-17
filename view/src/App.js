@@ -12,7 +12,7 @@ class App extends Component {
     super(props)
     this.state = {
       customers: [],
-      modal_class: 'test_modal_hide',
+      modal_class: 'modal_hide',
       name: null,
       current_customer: {},
       current_action: {},
@@ -43,7 +43,7 @@ class App extends Component {
   modalToggle = event => {
     this.setState({modal_type: event.target.value})
     let { modal_class } = this.state;
-    (modal_class === 'test_modal_hide') ? this.setState({modal_class: 'test_modal'}) : this.setState({modal_class: 'modal_hide'})
+    (modal_class === 'modal_hide') ? this.setState({modal_class: 'modal_show'}) : this.setState({modal_class: 'modal_hide'})
   };
   get_trans_data = event => {
     let request = this.state.cards[event.target.value];
@@ -85,11 +85,6 @@ class App extends Component {
         break;
     };
   }
-  close_modal = event => {
-    console.log(event.target.className);
-    (event.target.className === 'test_modal') ? 
-    this.setState({modal_class: 'test_modal_hide'}) : console.log(null);
-  }
   render() {
     return (
       <div className="App">
@@ -97,7 +92,7 @@ class App extends Component {
                 card_btn={this.state.card_btn}
                 trans_btn={this.state.trans_btn}>
         </Navbar>
-        <Modal className={this.state.modal_class} onClick={this.close_modal}> 
+        <Modal className={this.state.modal_class} onClick={this.modalToggle}> 
           <div className="test_content"> This is a test modal content</div>
         </Modal>
         {/* <Modal className={this.state.modal_class}>

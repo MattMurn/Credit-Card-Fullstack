@@ -52,23 +52,11 @@ button {
   width: 1200px;
   color: white;
 }
-.modal_show {
-  position: relative;
-  color: black;
-  background: white;
-  height: 280px;
-  width: 500px;
-  margin: auto;
-}
 #outer_id {
   z-index: 101;
   opacity: .5;
   background: pink;
 
-}
-.modal_hide {
-  position: none;
-  left: -1000px;
 }
 .inputs {
   position: relative;
@@ -130,7 +118,7 @@ button:hover {
   background: black;
 }
 
-.test_modal {
+.modal_show {
   height: 1000px;
   padding-top: 150px;
   width: 100%;
@@ -147,6 +135,6 @@ button:hover {
   margin: auto;
 }
 
-.test_modal_hide {
+.modal_hide {
   display: none;
 }
