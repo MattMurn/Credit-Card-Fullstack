@@ -3,7 +3,6 @@ body {
   /* background: gray; */
   background: url('https://i.huffpost.com/gen/1837972/images/o-CHICAGO-RIVER-facebook.jpg');
   background-color: aqua;
-   
 }
 .app {
   background: white;
@@ -129,4 +128,25 @@ button:hover {
 }
 .card_details:hover {
   background: black;
+}
+
+.test_modal {
+  height: 1000px;
+  padding-top: 150px;
+  width: 100%;
+  position: fixed;
+  z-index: 1002;
+  background-color: rgba(0,0,0,0.4);
+}
+.test_content {
+  height: 300px;
+  width: 500px;
+  z-index: 1003;
+  opacity: 2;
+  background-color: black;
+  margin: auto;
+}
+
+.test_modal_hide {
+  display: none;
 }

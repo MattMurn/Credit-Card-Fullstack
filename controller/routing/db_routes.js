@@ -26,7 +26,7 @@ module.exports = app => {
         query_functions.create_new_card(action_check);
         break;
       case 'new_transaction':
-        console.log(action_check)
+        // console.log(action_check)
         /* this is probably where you want to bring in the logic from that 
         Card class and then
         console.log('new transaction hit')

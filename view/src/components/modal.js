@@ -3,7 +3,7 @@ import '../App.css';
 
 const modal = props => {
     return (
-        <div className={props.className}>
+        <div className={props.className} onClick={props.onClick}>
             {props.children}
         </div>
     )
