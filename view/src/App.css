@@ -16,7 +16,7 @@ button {
   font-family: none;
   color: white;
   opacity: 1;
-  z-index: 100;
+  z-index: 10;
 }
 .customers {
   float: left;
@@ -39,7 +39,7 @@ button {
   background: navy; 
   opacity: .95;
   float: left;  
-  z-index: 100;
+  z-index: 0;
   color: white;
 }
 .jumbotron {
@@ -51,6 +51,9 @@ button {
   height: 800px;
   width: 1200px;
   color: white;
+}
+.jumbo_hide {
+  display: none;
 }
 #outer_id {
   z-index: 101;
@@ -75,12 +78,14 @@ button {
   margin: 10px 20px 10px 20px;
   clear: both;
 }
-/* .modal_input {
+.modal_input {
   margin: auto;
   position: relative;
   display: inherit;
   top: 150px;
-} */
+  z-index: 2000;
+  
+}
 .trans_hide {
   opacity: 0;
 }
@@ -123,14 +128,14 @@ button:hover {
   padding-top: 150px;
   width: 100%;
   position: fixed;
-  z-index: 1002;
+  z-index: 20;
   background-color: rgba(0,0,0,0.4);
 }
-.test_content {
+.modal_content {
   height: 300px;
   width: 500px;
-  z-index: 1003;
-  opacity: 2;
+  z-index: 30;
+  opacity: 1;
   background-color: black;
   margin: auto;
 }

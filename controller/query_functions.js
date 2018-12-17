@@ -65,7 +65,6 @@ module.exports = {
     .then(customers => {
       let all_customers = []
       customers.map((el, i)=> all_customers.push(el))
-      // console.log(all_customers)
       return all_customers;
     });
   }

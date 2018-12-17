@@ -3,12 +3,12 @@ import React from 'react';
 const Jumbotron = props => {
     return (
         <div>
-            <div className="jumbotron">
+            <div className={props.className}>
                 <div className="profile">
-                    <img className="profile_img"src="https://via.placeholder.com/300"/>
+                    <img className="profile_img"src="https://northmemorial.com/wp-content/uploads/2016/10/PersonPlaceholder-300x300.png"/>
                     <div className="profile_info">
                         <div className="profile_name">{props.name}</div>
-                        <div className="profile_credit_score">{props.credit_score}</div>
+                        <div className="profile_credit_score"> Your current credit score is: {props.credit_score}</div>
                     </div>
                 </div>
                 <div className="card_display">
