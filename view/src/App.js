@@ -14,11 +14,9 @@ class App extends Component {
       customers: [{}],
       modal_class: 'modal_hide',
       jumbotron_class: 'jumbo_hide',
-      name: null,
       current_customer: {},
       current_action: {},
       cards: [],
-      modal_type: null,
       trans_btn: 'trans_hide',
       card_btn: 'card_hide',
       current_card: ''// as mouse enters into componenet, current card updates.
@@ -26,12 +24,10 @@ class App extends Component {
   };
   componentWillMount = () => {
     Axios.get('/allCustomers').then(data => this.setState({customers: data.data}))
-    .then(data => console.log(this.state.customers))
-    // console.log(this.state.customers)
   };
   get_card_data = id => {
     Axios.post('/customerCards', id)
-    .then(response => this.setState({cards: response.data}));
+    .then(response => console.log(response));
   };
   jumbotronAction = event => { 
     //-1 used to offset difference in customer array & db id.
@@ -39,10 +35,10 @@ class App extends Component {
     this.setState({
       jumbotron_class: 'jumbotron',
       current_customer:  this.state.customers[local_id],
-      name: ` Welcome, ${this.state.customers[local_id].first_name}`,
       card_btn: 'card_show'
   })
-    this.get_card_data(this.state.customers[event.target.name]);
+    console.log(this.state.customers[event.target.name])
+    this.get_card_data(this.state.customers[event.target.name])
   };
   close_modal = event => {
     if(event.target.className === 'modal_show'){
@@ -65,9 +61,11 @@ class App extends Component {
     if(modal_type === 'new_customer'){
       this.setState(prevState => ({
         customers: [...prevState.customers, current_action],
-        modal_class: 'modal_hide'
+        modal_class: 'modal_hide',
+        current_customer: current_action
       }));
     }
+    console.log(this.state.current_customer)
     this.setState({modal_class: 'modal_hide'})
     Axios.post('/currentAction', current_action)
     .then(response => console.log(response));
@@ -117,9 +115,8 @@ class App extends Component {
             )
           })}
         </Sidebar>
-        <Jumbotron 
+        <Jumbotron name={this.state.current_customer.first_name}
           className={this.state.jumbotron_class}
-          name={this.state.name}
           credit_score={this.state.current_customer.credit_score}
         >
           {this.state.cards.map((data, i)=> {

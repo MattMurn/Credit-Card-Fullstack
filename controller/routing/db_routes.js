@@ -16,17 +16,16 @@ module.exports = app => {
 
   })
   app.post('/currentAction', (req, res) => {
-    // console.log(req.body.model_type);
-    let action_check = req.body;
-    switch(action_check.model_type){
+    // let req.body = req.body;
+    switch(req.body.modal_type){
       case 'new_customer':
-        query_functions.create_new_customer(action_check);
+        query_functions.create_new_customer(req.body);
         break;
       case 'new_card':
-        query_functions.create_new_card(action_check);
+        query_functions.create_new_card(req.body);
         break;
       case 'new_transaction':
-        // console.log(action_check)
+        // console.log(req.body)
         /* this is probably where you want to bring in the logic from that 
         Card class and then
         console.log('new transaction hit')

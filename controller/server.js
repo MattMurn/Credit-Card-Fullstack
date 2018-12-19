@@ -11,17 +11,17 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-let open_date = new Date("October 18, 2018 11:13:00");// 0 days
-let second_transaction_date = new Date("November 2, 2018 15:13:20"); // 15 days
-let third_transaction_date = new Date("November 12, 2018 15:13:20"); // 25 days
-let check_balance_date = new Date("November 17,2018 15:13:20"); // 30 days
+// let open_date = new Date("October 18, 2018 11:13:00");// 0 days
+// let second_transaction_date = new Date("November 2, 2018 15:13:20"); // 15 days
+// let third_transaction_date = new Date("November 12, 2018 15:13:20"); // 25 days
+// let check_balance_date = new Date("November 17,2018 15:13:20"); // 30 days
  
-let first_card = new Card(.35, 1000, new Date(), 2);
-query_functions.create_new_card(first_card);
-first_card.card_transaction('charge', 500, open_date);
-first_card.card_transaction('payment', 300, second_transaction_date);
-query_functions.send_transaction_history(first_card.transaction_history);
-first_card.get_balance_as_of_date(check_balance_date);
+// let first_card = new Card(.35, 1000, new Date(), 2);
+// query_functions.create_new_card(first_card);
+// first_card.card_transaction('charge', 500, open_date);
+// first_card.card_transaction('payment', 300, second_transaction_date);
+// query_functions.send_transaction_history(first_card.transaction_history);
+// first_card.get_balance_as_of_date(check_balance_date);
 
 
 require('./routing/db_routes')(app);
