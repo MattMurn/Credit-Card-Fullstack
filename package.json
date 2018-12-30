@@ -4,7 +4,8 @@
   "description": "Node application that manages customer / credit card transactions ",
   "main": "server.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "run": "nodemon ./controller/server.js"
   },
   "repository": {
     "type": "git",

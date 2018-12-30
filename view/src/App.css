@@ -48,7 +48,7 @@ button {
   top: 100px;
   left: 220px;
   float: left;
-  height: 800px;
+  height: 100%;
   width: 1200px;
   color: white;
 }
@@ -78,16 +78,18 @@ button {
   margin: 10px 20px 10px 20px;
   clear: both;
 }
-.modal_input {
-  margin: auto;
-  position: relative;
-  display: inherit;
-  top: 150px;
-  z-index: 2000;
-  
+.ex {
+  color: white;
+  position: absolute;
+  top: 110px;
+  right: 50px;
+  font-size: 30px;
+  background: inherit;
+  opacity: .8;
+  /* z-index: 0; */
 }
 .trans_hide {
-  opacity: 0;
+  display: none;
 }
 .card_hide {
   opacity: 0;
@@ -99,6 +101,9 @@ button {
   background: white;
   opacity: .7;
 }
+.card_display_hide {
+  display: none;
+}
 .profile {
   width: 97%;
   position: relative;
@@ -108,7 +113,6 @@ button {
   opacity: .95;
   /* background: blue; */
 }
-
 .profile_name, .profile_credit_score {
   color: black;
   font-size: 40px;
@@ -116,13 +120,32 @@ button {
 .profile_img {
   float: left;
 }
+.profile_card {
+  position: relative;
+  background: grey;
+  width: 325px;
+  height: 150px;
+  float: left;
+}
+#profile_card_hide {
+  /* display: none; */
+  background: pink;
+}
+.mini {
+  margin-left: 10px;
+  font-size: 30px;
+}
+.back {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
 button:hover {
   font-size: 130%
 }
-.card_details:hover {
+.card_details:hover, .profile_card:hover {
   background: black;
 }
-
 .modal_show {
   height: 1000px;
   padding-top: 150px;
@@ -139,7 +162,72 @@ button:hover {
   background-color: black;
   margin: auto;
 }
+.modal_input {
+  /* margin: auto; */
+  position: relative;
+  display: inherit;
+  /* top: 150px; */
+  margin-bottom: 5px;
+  z-index: 2000;
+}
+.inner_modal_content {
+  margin: 75px 166px 50px;
+  position: absolute;
+}
+#date_picker {
+  background: white;
+  color: black;
+  font-size: inherit;
+  position: inherit;
+  width: 162px;
+  /* margin-left: 100px; */
+}
+.react-datepicker__triangle {
+  display: none;
+}
 
+.react-datepicker-popper, .react-datepicker {
+  left: 400px;
+}
 .modal_hide {
   display: none;
+}
+.radio {
+  color: white;
+}
+.charge_radio {
+  float: left;
+  margin-right: 5px;
+}
+.trans_history {
+  position: relative;
+  top: 50px;
+  height: 100%;
+  width: 97%;
+  background: none;
+  color: white;
+}
+.trans_row {
+  height: 30px;
+  margin-bottom: 10px; 
+  background: white;
+  color: black;
+}
+/* .trans_prop {
+  float: left;
+  margin-right: 10px;
+  width: 20%;
+} */
+th {
+  width: 25%;
+}
+tr {
+  width: 100%;
+  background: purple;
+  margin: 0px;
+}
+
+td {
+  width: 25%;  
+  text-align: center;
 }

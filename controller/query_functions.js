@@ -14,9 +14,22 @@ module.exports = {
       card_id: instance.card_id,
       apr: instance.apr,
       credit_limit: instance.credit_limit,
-      current_balance: instance.balance,
+      current_balance: instance.current_balance,
       interest_accrued: 0,
       createdAt: instance.open_date
+    })
+  },
+  create_new_transaction: instance => {
+    db.transactions.create({
+      transaction_id: instance.id,
+      card_id: instance.card_id,
+      transaction_type: instance.transaction_type,
+      transaction_timestamp: instance.start_date,
+      transaction_amount: instance.amount,
+      current_balance: instance.current_balance,
+      interest_accrued: null,
+      transaction_approved: null
+
     })
   },
   send_transaction_history: array => {
@@ -48,12 +61,12 @@ module.exports = {
       }
     })
     .then(transactions => {
-      let log = {};
-      transactions.map((element, i)=> {
-        log[i] = element.dataValues;
-      })
+      // let log = {};
+      // transactions.map((element, i)=> {
+      //   log[i] = element.dataValues;
+      // })
       // console.log(log);
-      return log;
+      return transactions;
     })
     /*
     this should be used only when a user wants to see transactions
@@ -67,5 +80,13 @@ module.exports = {
       customers.map((el, i)=> all_customers.push(el))
       return all_customers;
     });
+  },
+  udpate_card_balance: (current_balance, card_id) => {
+    db.cards.update(
+      { current_balance: current_balance },
+      { where:
+        { id: card_id } 
+      }
+    );
   }
 }
