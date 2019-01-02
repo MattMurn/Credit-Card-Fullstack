@@ -174,19 +174,26 @@ button:hover {
   margin: 75px 166px 50px;
   position: absolute;
 }
-#date_picker {
+/* #date_picker {
   background: white;
   color: black;
   font-size: inherit;
   position: inherit;
-  width: 162px;
+  width: 162px; */
   /* margin-left: 100px; */
-}
+/* } */
 .react-datepicker__triangle {
   display: none;
 }
-
-.react-datepicker-popper, .react-datepicker {
+.react-datepicker {
+  position: absolute;
+  top:00px;
+  left: 200px;
+  width: 312px;
+}
+.popper_override {
+  position: relative;
+  top: 300px;
   left: 400px;
 }
 .modal_hide {
@@ -219,14 +226,16 @@ button:hover {
   width: 20%;
 } */
 th {
-  width: 25%;
+  width: 30%;
+}
+thead {
+  width: 100%
 }
 tr {
   width: 100%;
   background: purple;
   margin: 0px;
 }
-
 td {
   width: 25%;  
   text-align: center;

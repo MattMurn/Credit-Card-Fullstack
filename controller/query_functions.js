@@ -20,19 +20,20 @@ module.exports = {
     })
   },
   create_new_transaction: instance => {
+
     db.transactions.create({
       transaction_id: instance.id,
       card_id: instance.card_id,
       transaction_type: instance.transaction_type,
-      transaction_timestamp: instance.start_date,
-      transaction_amount: instance.amount,
+      transaction_timestamp: instance.transaction_timestamp,
+      transaction_amount: instance.transaction_amount,
       current_balance: instance.current_balance,
       interest_accrued: null,
       transaction_approved: null
-
     })
   },
   send_transaction_history: array => {
+
     array.map((element, i)=> {
       db.transactions.create({
         transaction_id: element.transaction_id,
@@ -48,6 +49,7 @@ module.exports = {
     })
   },
   get_card_data: id => {
+
     return db.cards.findAll({
       where: {
         customer_id: id
@@ -58,22 +60,16 @@ module.exports = {
     return db.transactions.findAll({
       where: {
         card_id: id
-      }
+      },
+      order: 
+        [['id', 'DESC']]
     })
     .then(transactions => {
-      // let log = {};
-      // transactions.map((element, i)=> {
-      //   log[i] = element.dataValues;
-      // })
-      // console.log(log);
       return transactions;
     })
-    /*
-    this should be used only when a user wants to see transactions
-    after clicking through a on a certain card.
-    */
   },
   get_all_customers: () => {
+
     return db.customers.findAll({})
     .then(customers => {
       let all_customers = []
@@ -82,6 +78,7 @@ module.exports = {
     });
   },
   udpate_card_balance: (current_balance, card_id) => {
+
     db.cards.update(
       { current_balance: current_balance },
       { where:

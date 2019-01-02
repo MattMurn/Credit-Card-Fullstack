@@ -6,7 +6,7 @@ import { Jumbotron, Profile, CardDisplay, CurrentCard, CardDetails, TransRow, Tr
 import { Modal, Transaction, Card, Customer} from './components/modal';
 import { PieChart, Pie } from 'recharts';
 import Axios from 'axios';
-
+import {num_convert, date_convert, transaction_error_handler } from './helper_functions';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -26,20 +26,18 @@ class App extends Component {
       card_btn: 'card_hide',
       card_display: 'card_display',
       current_card: null,// as mouse enters into componenet, current card updates.
-      start_date: new Date(),
+      transaction_timestamp: new Date(),
       trans_display: 'trans_hide',
       profile_card_display: 'profile_card_hide',
       trans_history: []
     };
   };
-
   componentWillMount = () => {
 
     Axios.get('/allCustomers').then(data =>{
-      console.log(data);
       this.setState({customers: data.data})})
   };
-    // sending card data to server.
+
   get_card_data = id => {
 
     Axios.post('/customerCards', id)
@@ -58,7 +56,6 @@ class App extends Component {
       trans_display: 'trans_hide',
       current_card: null
   });
-
     this.get_card_data(this.state.customers[local_id])
   };
 
@@ -82,28 +79,26 @@ class App extends Component {
 
   get_trans_data = event => {
 
-    // let request = this.state.current_card;
-    console.log(this.state.cards);
-    console.log(event.target.value)
     let local_card_id = event.target.value;
     let trans_card_id = this.state.cards[local_card_id].id
-    // this.setState({current_card: this.state.cards[event.target.value]})
+
     Axios.post('/cardTransactions', {id: trans_card_id})
     .then(data => {
-      console.log(data);
+
       this.setState({
-      current_card: this.state.cards[local_card_id],      
-      trans_history: data.data,
-      card_display: 'card_display_hide',
-      trans_display: 'trans_history',
-      profile_card_display: 'profile_card'
-    })
-    })
+        current_card: this.state.cards[local_card_id],        
+        trans_history: data.data,
+        card_display: 'card_display_hide',
+        trans_display: 'trans_history',
+        profile_card_display: 'profile_card'
+      })
+    });
   };
 
   send_current_action = () => {
-    
-    const {current_action, modal_type, current_card, start_date } = this.state;
+
+    const { current_action, modal_type, current_card, transaction_timestamp } = this.state;
+
     if(modal_type === 'new_customer'){
       this.setState(prevState => ({
         customers: [...prevState.customers, current_action],
@@ -111,21 +106,35 @@ class App extends Component {
         current_customer: current_action
       }));
     }
+
     if(modal_type === 'new_transaction'){
-      if((parseFloat(current_action.amount) + parseFloat(current_card.current_balance)) > parseFloat(current_card.credit_limit)){
+      console.log(this.state.current_card.createdAt);
+      let dollar_pattern = /^\$?[0-9]+(\.[0-9][0-9])?$/;
+      current_action.card_id = current_card.id;
+      current_action.transaction_timestamp = transaction_timestamp;
+      current_action.current_balance = current_card.current_balance;
+      current_action.transaction_approved = true;
+      if((parseFloat(current_action.transaction_amount) + parseFloat(current_card.current_balance)) > parseFloat(current_card.credit_limit)){
         return alert('this transaction exceeds current balance')  
       };
-      if(current_action.amount > current_card.current_balance && current_action.transaction_type === 'payment'){
-        alert('this payment is more than your current balance.')
-      }
-      current_action.card_id = current_card.id;
-      current_action.start_date = start_date;
-      current_action.current_balance = current_card.current_balance;
-      console.log(this.state.current_action);
-      this.setState(prevState => ({trans_history: [...prevState.trans_history, current_action]}))
+    if(current_action.amount > current_card.current_balance && current_action.transaction_type === 'payment'){
+        return alert('this payment is more than your current balance.')
     }
-    this.setState({ modal_class: 'modal_hide'})
-    console.log(this.state.current_card)
+    if(current_action.transaction_timestamp < current_card.createdAt){
+        return alert(`please make a transaction after this crad was created: ${current_card.createdAt}`);
+    }
+    let isNumber = dollar_pattern.test(current_action.transaction_amount);
+    if(!isNumber){
+        return alert('please enter a valid number');
+    }
+      this.setState(prevState => ({
+        trans_history: [current_action, ...prevState.trans_history],
+        modal_class: 'modal_hide',
+        current_card: {
+          current_balance: current_card.current_balance + parseFloat(current_action.transaction_amount)  
+        }
+      }))
+    }
     Axios.post('/currentAction', current_action)
     .catch(response => {console.log(response)})
   };
@@ -133,14 +142,15 @@ class App extends Component {
   change_handler = event => {
 
     const { name, value } = event.target;
-    const { modal_type, current_customer, start_date } = this.state;
+    const { modal_type, current_customer, transaction_timestamp } = this.state;
+
     this.setState((prevState) => ({
         'current_action':{
           ...prevState.current_action,
           modal_type: modal_type,
           customer_id: current_customer.id,
           [name]: value,
-          start_date: start_date
+          transaction_timestamp: JSON.stringify(transaction_timestamp)
         }
       })
     );
@@ -148,7 +158,7 @@ class App extends Component {
 
   change_date = date => {
 
-    this.setState({start_date: date})
+    this.setState({transaction_timestamp: date})
   };
 
   modal_render = () => {
@@ -159,11 +169,12 @@ class App extends Component {
         <DatePicker 
             className="modal_input"
             id="date_picker"
-            selected={this.state.start_date}
+            selected={this.state.transaction_timestamp}
             onChange={this.change_date}
             showTimeSelect
             dateFormat="Pp"
-            name="date"
+            name="transaction_timestamp"
+            popperClassName="popper_override"
           />
         </Transaction>
       case 'new_card':
@@ -221,9 +232,7 @@ class App extends Component {
           <Profile name={current_customer.first_name}
             credit_score={current_customer.credit_score}
           >
-        <PieChart width={200} height={200}>
-            <Pie isAnimationActive={false} data={[{name: "credit score", value: 750}]} cx={100} cy={100} outerRadius={80} fill="#8884d8" label/>
-        </PieChart>
+
           {/* using render_mini method to render card info when looking
             transactions. consider changing using router module */}
               {this.render_mini()}
@@ -232,21 +241,23 @@ class App extends Component {
           <CardDisplay card_display_class={card_display}>
             {cards.map((data, i)=> {
               return <CardDetails card_id={data.id}
-                        balance={data.current_balance}
-                        limit={data.credit_limit}
+                        balance={num_convert(data.current_balance)}
+                        limit={num_convert(data.credit_limit)}
                         value={i}
                         key={data.id}
                         onClick={this.get_trans_data}/>
             })}
           </CardDisplay>
           <TransHistory className={trans_display}>
-          {trans_history.map((element, i)=> {
-          return  <TransRow 
-              timestamp={element.transaction_timestamp} 
-              id={element.id} type={element.transaction_type} 
-              key={i}
-              amount={element.transaction_amount}
-          />
+            {trans_history.map((element, i)=> {
+              return  <TransRow 
+                  timestamp={date_convert(element.transaction_timestamp)} 
+                  id={element.id} 
+                  type={element.transaction_type} 
+                  key={i}
+                  balance={num_convert(element.current_balance)}
+                  amount={num_convert(element.transaction_amount)}
+              />
           })}
         </TransHistory>
         </Jumbotron>
@@ -255,3 +266,53 @@ class App extends Component {
   };
 };
 export default App;
+
+
+/*
+
+const { PieChart, Pie, Sector, Cell } = Recharts;
+const data = [{name: 'Group A', value: 400}, {name: 'Group B', value: 300},
+                  {name: 'Group C', value: 300}, {name: 'Group D', value: 200}];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+const RADIAN = Math.PI / 180;                    
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+ 	const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x  = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy  + radius * Math.sin(-midAngle * RADIAN);
+ 
+  return (
+    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} 	dominantBaseline="central">
+    	{`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
+const SimplePieChart = React.createClass({
+	render () {
+  	return (
+    	<PieChart width={800} height={400} onMouseEnter={this.onPieEnter}>
+        <Pie
+          data={data} 
+          cx={300} 
+          cy={200} 
+          labelLine={false}
+          label={renderCustomizedLabel}
+          outerRadius={80} 
+          fill="#8884d8"
+        >
+        	{
+          	data.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
+          }
+        </Pie>
+      </PieChart>
+    );
+  }
+})
+
+ReactDOM.render(
+  <SimplePieChart />,
+  document.getElementById('container')
+);
+
+*/

@@ -36,7 +36,7 @@ const transaction = props => {
                     </div>
 
                 </div>
-                <input className="modal_input" type="text" onChange={props.onChange} name="amount" placeholder="amount"/>
+                <input className="modal_input" type="text" onChange={props.onChange} name="transaction_amount" placeholder="amount"/>
                 {props.children}
                 <button className="modal_input" onClick={props.button_click}>execute transaction</button>
             </div>

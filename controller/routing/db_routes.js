@@ -36,17 +36,22 @@ module.exports = app => {
         break;
       case 'new_transaction':
       // check the format of the start_date property against the js Date() object.
-        console.log('THIS IS THE BODY OF THE DB_ROUTES', req.body)
+        // console.log('THIS IS THE BODY OF THE DB_ROUTES', req.body.current_balance)
+        let { body : { transaction_amount, transaction_type, current_balance, card_id } } = req;
+        console.log(current_balance);
         let new_balance;
-        if(req.body.transaction_type === 'charge'){
-          new_balance = Math.round((parseFloat(req.body.amount) + req.body.current_balance)*100)/100;
+        transaction_amount = parseFloat(transaction_amount);
+        if(transaction_type === 'charge'){
+          new_balance = Math.round(( transaction_amount + current_balance)*100)/100;
         }
-        if(req.body.transaction_type === 'payment'){
-          new_balance = Math.round((req.body.current_balance - parseFloat(req.body.amount))*100)/100;
+        if(transaction_type === 'payment'){
+          new_balance = Math.round((current_balance - transaction_amount)*100)/100;
         }
-        req.body.current_balance = new_balance;
+        current_balance = new_balance;
+  
+        console.log(current_balance);
         query_functions.create_new_transaction(req.body);
-        query_functions.udpate_card_balance(req.body.current_balance, req.body.card_id);
+        query_functions.udpate_card_balance(current_balance, card_id);
         /* this is probably where you want to bring in the logic from that 
         Card class and then
         console.log('new transaction hit')
@@ -55,7 +60,7 @@ module.exports = app => {
             transaction_type: DataTypes.STRING, object
             transaction_timestamp: DataTypes.STRING objec
             post_date: DataTypes.STRING, after accrued
-            transaction_amount: DataTypes.FLOAT, object
+            transaction_transaction_amount: DataTypes.FLOAT, object
             current_balance: DataTypes.FLOAT, object
             interest_accrued: DataTypes.FLOAT, after accrued
             transaction_approved: DataTypes.STRING checked in 

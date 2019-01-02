@@ -1,5 +1,5 @@
 import React from 'react';
-import { PieChart, Pie } from 'recharts';
+import { PieChart, Pie, Cell } from 'recharts';
 const jumbotron = props => {
     
     return (
@@ -69,6 +69,7 @@ const transHistory = props => {
                     <th> Amount </th>
                     <th> Type </th>
                     <th> Id </th>
+                    <th> Balance </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -84,22 +85,49 @@ const transRow = props => {
 
     return (
         <tr>
-                <td className="trans_prop">{props.timestamp}</td>
-                <td className="trans_prop">${props.amount}</td>
-                <td className="trans_prop">{props.type}</td>
-                <td className="trans_prop">{props.id}</td>
-                <td className="trans_prop">{props.balance}</td>
-            </tr>
+            <td className="trans_prop">{props.timestamp}</td>
+            <td className="trans_prop">${props.amount}</td>
+            <td className="trans_prop">{props.type}</td>
+            <td className="trans_prop">{props.id}</td>
+            <td className="trans_prop">${props.balance}</td>
+        </tr>
     )
 }
 
 const chart = props => {
-    let test_data = [{name: "credit score", value: 750}]
+    const data = [{name: 'Bad', value: '< 400'}, {name: 'Good', value: '500 - 700'},
+    {name: 'Excellent', value: ' > 700'}];
+    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+const RADIAN = Math.PI / 180;                    
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+ 	const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x  = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy  + radius * Math.sin(-midAngle * RADIAN);
+ 
+  return (
+    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} 	dominantBaseline="central">
+    	{`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
     return (
-        <PieChart width={400} height={400}>
-            <Pie isAnimationActive={false} data={test_data} cx={200} cy={200} outerRadius={80} fill="#8884d8" label/>
-        </PieChart>
-    )
+    	<PieChart width={200} height={200}>
+        <Pie
+          data={data} 
+          cx={300} 
+          cy={200} 
+          labelLine={false}
+          label={renderCustomizedLabel}
+          outerRadius={80} 
+          fill="#8884d8"
+        >
+        	{/* {
+          	data.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
+          } */}
+        </Pie>
+      </PieChart>
+    );
 }
 export const Jumbotron = jumbotron;
 export const Profile  = profile;
@@ -109,33 +137,3 @@ export const CardDetails = cardDetails;
 export const TransHistory = transHistory;
 export const TransRow = transRow;
 export const Chart = chart;
-
-/*
-const {PieChart, Pie, Legend, Tooltip} = Recharts;
-
-const data01 = [{name: 'Group A', value: 400}, {name: 'Group B', value: 300},
-                  {name: 'Group C', value: 300}, {name: 'Group D', value: 200},
-                  {name: 'Group E', value: 278}, {name: 'Group F', value: 189}]
-
-const data02 = [{name: 'Group A', value: 2400}, {name: 'Group B', value: 4567},
-                  {name: 'Group C', value: 1398}, {name: 'Group D', value: 9800},
-                  {name: 'Group E', value: 3908}, {name: 'Group F', value: 4800}];
-
-const TwoSimplePieChart = React.createClass({
-	render () {
-  	return (
-    	<PieChart width={800} height={400}>
-        <Pie isAnimationActive={false} data={data01} cx={200} cy={200} outerRadius={80} fill="#8884d8" label/>
-        <Pie data={data02} cx={500} cy={200} innerRadius={40} outerRadius={80} fill="#82ca9d"/>
-        <Tooltip/>
-       </PieChart>
-    );
-  }
-})
-
-ReactDOM.render(
-  <TwoSimplePieChart />,
-  document.getElementById('container')
-);
-
-*/
