@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/navbar';
 import Sidebar from './components/sidebar';
-import { Jumbotron, Profile, CardDisplay, CurrentCard, CardDetails, TransRow, TransHistory, Chart } from './components/jumbotron';
+import { Jumbotron, Profile, CardDisplay,
+          CurrentCard, CardDetails, TransRow, 
+          TransHistory, Chart } from './components/jumbotron';
 import { Modal, Transaction, Card, Customer} from './components/modal';
 import { PieChart, Pie } from 'recharts';
 import Axios from 'axios';
-import {num_convert, date_convert, transaction_error_handler } from './helper_functions';
+import {num_convert, date_convert, transaction_validation } from './helper_functions';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -98,8 +101,10 @@ class App extends Component {
   send_current_action = () => {
 
     const { current_action, modal_type, current_card, transaction_timestamp } = this.state;
-
+    let timestamp = new Date (transaction_timestamp);
+    console.log(timestamp);
     if(modal_type === 'new_customer'){
+
       this.setState(prevState => ({
         customers: [...prevState.customers, current_action],
         modal_class: 'modal_hide',
@@ -108,36 +113,29 @@ class App extends Component {
     }
 
     if(modal_type === 'new_transaction'){
-      console.log(this.state.current_card.createdAt);
-      let dollar_pattern = /^\$?[0-9]+(\.[0-9][0-9])?$/;
-      current_action.card_id = current_card.id;
-      current_action.transaction_timestamp = transaction_timestamp;
-      current_action.current_balance = current_card.current_balance;
-      current_action.transaction_approved = true;
-      if((parseFloat(current_action.transaction_amount) + parseFloat(current_card.current_balance)) > parseFloat(current_card.credit_limit)){
-        return alert('this transaction exceeds current balance')  
-      };
-    if(current_action.amount > current_card.current_balance && current_action.transaction_type === 'payment'){
-        return alert('this payment is more than your current balance.')
-    }
-    if(current_action.transaction_timestamp < current_card.createdAt){
-        return alert(`please make a transaction after this crad was created: ${current_card.createdAt}`);
-    }
-    let isNumber = dollar_pattern.test(current_action.transaction_amount);
-    if(!isNumber){
-        return alert('please enter a valid number');
-    }
-      this.setState(prevState => ({
-        trans_history: [current_action, ...prevState.trans_history],
-        modal_class: 'modal_hide',
-        current_card: {
-          current_balance: current_card.current_balance + parseFloat(current_action.transaction_amount)  
-        }
-      }))
-    }
-    Axios.post('/currentAction', current_action)
-    .catch(response => {console.log(response)})
-  };
+      // check user input. source in helper_functions.js
+      current_action.transaction_timestamp = timestamp;
+      if(!transaction_validation(current_action, current_card)){
+        return;
+      }
+      // look into the namespacing pattern from 'learning js design patterns' for a better way.
+        current_action.card_id = current_card.id;
+
+        current_action.current_balance = current_card.current_balance;
+        current_action.transaction_approved = true;
+       
+        this.setState(prevState => ({
+          trans_history: [current_action, ...prevState.trans_history],
+          modal_class: 'modal_hide',
+          current_card: {...current_card,
+            current_balance: current_card.current_balance + parseFloat(current_action.transaction_amount)  
+          }
+        }))
+      }
+      //send current_action object to server 
+      Axios.post('/currentAction', current_action)
+      .catch(response => {console.log(response)})
+  }
 
   change_handler = event => {
 
@@ -157,7 +155,6 @@ class App extends Component {
   };
 
   change_date = date => {
-
     this.setState({transaction_timestamp: date})
   };
 
@@ -172,7 +169,7 @@ class App extends Component {
             selected={this.state.transaction_timestamp}
             onChange={this.change_date}
             showTimeSelect
-            dateFormat="Pp"
+            dateFormat="MMMM d, yyyy h:mm aa"
             name="transaction_timestamp"
             popperClassName="popper_override"
           />
@@ -193,7 +190,7 @@ class App extends Component {
         mini_card_number={this.state.current_card.id}
         mini_card_balance={this.state.current_card.current_balance}
         onClick={() => {
-          console.log('profile hit')
+
           this.setState({
             trans_display: 'trans_hide',
             card_display: 'card_display',
@@ -208,9 +205,10 @@ class App extends Component {
     const { card_btn, modal_class,current_customer, 
             jumbotron_class, card_display, trans_display, 
             customers, cards, trans_btn, trans_history } = this.state;
-
+    console.log(this.state.current_card);
     return (
       <div className="App">
+      {/* ROUTER STARTS HERE HOMIE!!!! */}
         <Navbar update_click={this.open_modal}
                 card_btn={card_btn}
                 trans_btn={trans_btn}>

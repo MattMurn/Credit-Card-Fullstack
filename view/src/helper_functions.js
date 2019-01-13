@@ -1,3 +1,5 @@
+import { deflateSync } from "zlib";
+
 export const num_convert = num =>{
 
     let num_arr;
@@ -27,17 +29,50 @@ export const num_convert = num =>{
 
 export const date_convert = date => {
     let formatted_date = new Date(date);
+    // console.log(date, 'check for conversion comparison')
     return formatted_date.toLocaleString();
 };
+
+// write a transaction validation function that can replace 
+// conditionals in the send_current_action method.
+
+
 // let dollar_pattern = /^\$?[0-9]+(\.[0-9][0-9])?$/;
 // export const is_valid_amount = input => {
+export const transaction_validation = (action, card) => {
+    // console.log(parseFloat(action.transaction_timestamp), "///////", parseFloat(card.createdAt));
+    let timestamp = new Date(action.transaction_timestamp);
+    let createdAt = new Date(card.createdAt);
 
-    
+    // console.log(action.transaction_timestamp > createdAt.getDate());
+    console.log(`trans time ${action.transaction_timestamp.getTime()} createdAt ${createdAt.getTime()}`);
+    let dollar_pattern = /^\$?[0-9]+(\.[0-9][0-9])?$/;
+    let isNumber = dollar_pattern.test(action.transaction_amount);
+      if(!isNumber){
+        alert('please enter a valid number');
+        return false
+      }
+    if((parseFloat(action.transaction_amount) + parseFloat(card.current_balance)) > parseFloat(card.credit_limit)
+    && action.transaction_type === 'charge'){
+        alert('this transaction exceeds current balance')
+    return false;  
+    };
+    if(action.transaction_amount > card.current_balance && action.transaction_type === 'payment'){
+        alert('this payment is more than your current balance.')
+        return false;
+    }
+    if(action.transaction_timestamp < createdAt){
+        alert(`please make a transaction after this crad was created: ${card.createdAt}`);
+        return false;
+    }   
+    else{
+        return true;
+    }
+}
+
+// const date_to_milliseconds = date => {
+//     let new_date = new Date(date);
+//     return new_date.getMilliseconds();
 // }
-// export const transaction_error_handler = (current_action, current_card) => {
 
-    
-// }
-
-// console.log(dollar_pattern.test('$40.40'))
-// console.log(is_valid_amount('$i5.00'));
+// console(date_to_milliseconds('2018-12-28T18:57:44.561Z'));

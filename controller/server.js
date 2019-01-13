@@ -6,6 +6,7 @@ const path = require('path');
 const bodyParser = require('body-parser')
 const db = require('../model/sequelize/models');
 const PORT = 3001;
+
 const query_functions = require('./query_functions');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -23,7 +24,7 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 // query_functions.send_transaction_history(first_card.transaction_history);
 // first_card.get_balance_as_of_date(check_balance_date);
 
-
+//database routes
 require('./routing/db_routes')(app);
 
 app.get('*', (req, res) => {
