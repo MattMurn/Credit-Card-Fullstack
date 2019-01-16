@@ -41,7 +41,7 @@ class App extends Component {
       this.setState({customers: data.data})})
   };
 
-  get_card_data = id => {
+  card_data = id => {
 
     Axios.post('/customerCards', id)
     .then(response => this.setState({cards: response.data}));
@@ -59,7 +59,7 @@ class App extends Component {
       trans_display: 'trans_hide',
       current_card: null
   });
-    this.get_card_data(this.state.customers[local_id])
+    this.card_data(this.state.customers[local_id])
   };
 
   close_modal = event => {
@@ -101,8 +101,7 @@ class App extends Component {
   send_current_action = () => {
 
     const { current_action, modal_type, current_card, transaction_timestamp } = this.state;
-    let timestamp = new Date (transaction_timestamp);
-    console.log(timestamp);
+    
     if(modal_type === 'new_customer'){
 
       this.setState(prevState => ({
@@ -113,22 +112,23 @@ class App extends Component {
     }
 
     if(modal_type === 'new_transaction'){
-      // check user input. source in helper_functions.js
-      current_action.transaction_timestamp = timestamp;
+      let timestamp = new Date (transaction_timestamp);
+      
       if(!transaction_validation(current_action, current_card)){
         return;
       }
-      // look into the namespacing pattern from 'learning js design patterns' for a better way.
+        current_action.transaction_timestamp = timestamp;
         current_action.card_id = current_card.id;
-
         current_action.current_balance = current_card.current_balance;
         current_action.transaction_approved = true;
-       
+       // update state with new transaction data
         this.setState(prevState => ({
           trans_history: [current_action, ...prevState.trans_history],
           modal_class: 'modal_hide',
           current_card: {...current_card,
-            current_balance: current_card.current_balance + parseFloat(current_action.transaction_amount)  
+            current_balance: (current_action.transaction_type === 'payment') ?
+            current_card.current_balance - parseFloat(current_action.transaction_amount) :
+            current_card.current_balance + parseFloat(current_action.transaction_amount)
           }
         }))
       }
