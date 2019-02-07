@@ -143,7 +143,7 @@ button {
 button:hover {
   font-size: 130%
 }
-.card_details:hover, .profile_card:hover {
+.card_details:hover, .profile_card:hover, td:hover {
   background: black;
 }
 .modal_show {
@@ -233,10 +233,12 @@ thead {
 }
 tr {
   width: 100%;
-  background: purple;
+  background: grey;
   margin: 0px;
 }
 td {
   width: 25%;  
   text-align: center;
+
 }
+table {  border-collapse: collapse; }

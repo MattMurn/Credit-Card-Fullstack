@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/navbar';
 import Sidebar from './components/sidebar';
@@ -70,7 +70,7 @@ class App extends Component {
   };
 
   open_modal = event => {
-
+    console.log(event.target)
     if(event.target.value === 'new_transaction' && this.state.current_card === null){
       return alert('please select a card or create a new one!')
     }
@@ -207,59 +207,63 @@ class App extends Component {
             customers, cards, trans_btn, trans_history } = this.state;
     console.log(this.state.current_card);
     return (
-      <div className="App">
-      {/* ROUTER STARTS HERE HOMIE!!!! */}
-        <Navbar update_click={this.open_modal}
-                card_btn={card_btn}
-                trans_btn={trans_btn}>
-        </Navbar>
-        <Modal className={modal_class} onClick={this.close_modal}> 
-          {this.modal_render()}
-        </Modal>
-        <Sidebar>
-          {customers.map((obj,i) => {
-            return (
-              <button className="customer_button customers" type="sumbit"
-                key={i} name={obj.id} value={obj.first_name + " " + obj.last_name} onClick={this.jumbotronAction}>
-                {obj.first_name + " " + obj.last_name}
-              </button>
-            )
-          })}
-        </Sidebar>
-        <Jumbotron className={jumbotron_class}>
-          <Profile name={current_customer.first_name}
-            credit_score={current_customer.credit_score}
-          >
-
-          {/* using render_mini method to render card info when looking
-            transactions. consider changing using router module */}
-              {this.render_mini()}
-          </Profile>
-
-          <CardDisplay card_display_class={card_display}>
-            {cards.map((data, i)=> {
-              return <CardDetails card_id={data.id}
-                        balance={num_convert(data.current_balance)}
-                        limit={num_convert(data.credit_limit)}
-                        value={i}
-                        key={data.id}
-                        onClick={this.get_trans_data}/>
+      <Router>
+        <div className="App">
+          <Navbar update_click={this.open_modal}
+                  card_btn={card_btn}
+                  trans_btn={trans_btn}>
+          </Navbar>
+          <Route  path='/modal'>
+          <Modal className={modal_class} onClick={this.close_modal}> 
+            {/* {this.modal_render()} */}
+          </Modal>
+          </Route>
+          <Sidebar>
+            {customers.map((obj,i) => {
+              return (
+                <Link to='/' className="customer_button customers" type="sumbit"
+                  key={i} name={obj.id} value={obj.first_name + " " + obj.last_name} onClick={this.jumbotronAction}>
+                  {obj.first_name + " " + obj.last_name}
+                </Link>
+              )
             })}
-          </CardDisplay>
-          <TransHistory className={trans_display}>
-            {trans_history.map((element, i)=> {
-              return  <TransRow 
-                  timestamp={date_convert(element.transaction_timestamp)} 
-                  id={element.id} 
-                  type={element.transaction_type} 
-                  key={i}
-                  balance={num_convert(element.current_balance)}
-                  amount={num_convert(element.transaction_amount)}
-              />
-          })}
-        </TransHistory>
-        </Jumbotron>
-      </div>
+          </Sidebar>
+          {/* pass route / match from link */}
+          <Jumbotron className={jumbotron_class}>
+            <Profile name={current_customer.first_name}
+              credit_score={current_customer.credit_score}
+            >
+
+            {/* using render_mini method to render card info when looking
+              transactions. consider changing using router module */}
+                {this.render_mini()}
+            </Profile>
+
+            <CardDisplay card_display_class={card_display}>
+              {cards.map((data, i)=> {
+                return <CardDetails card_id={data.id}
+                          balance={num_convert(data.current_balance)}
+                          limit={num_convert(data.credit_limit)}
+                          value={i}
+                          key={data.id}
+                          onClick={this.get_trans_data}/>
+              })}
+            </CardDisplay>
+            <TransHistory className={trans_display}>
+              {trans_history.map((element, i)=> {
+                return  <TransRow 
+                    timestamp={date_convert(element.transaction_timestamp)} 
+                    id={element.id} 
+                    type={element.transaction_type} 
+                    key={i}
+                    balance={num_convert(element.current_balance)}
+                    amount={num_convert(element.transaction_amount)}
+                />
+            })}
+          </TransHistory>
+          </Jumbotron>
+        </div>
+      </Router>
     );
   };
 };

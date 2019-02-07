@@ -7,12 +7,12 @@ let open_date = new Date("October 18, 2018 11:13:00");// 0 days
 let second_transaction_date = new Date("November 2, 2018 15:13:20"); // 15 days
 let third_transaction_date = new Date("November 12, 2018 15:13:20"); // 25 days
 let check_balance_date = new Date("November 17,2018 15:13:20"); // 30 days
-const date_compare = (a, b) => {
-    if(a > b){
-        return true;
-    }
-    return false
-}
+// const date_compare = (a, b) => {
+//     if(a > b){
+//         return true;
+//     }
+//     return false
+// }
 // Fist Test Scenario
 // test('Test scenario 1', ()=> {
 //     let test_one = new Card(.35, 1000, open_date);

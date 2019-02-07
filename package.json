@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "run": "nodemon ./controller/server.js"
+    "start": "nodemon ./controller/server.js"
   },
   "repository": {
     "type": "git",
