@@ -70,7 +70,7 @@ class App extends Component {
   };
 
   open_modal = event => {
-    console.log(event.target)
+    console.log(event.target.value)
     if(event.target.value === 'new_transaction' && this.state.current_card === null){
       return alert('please select a card or create a new one!')
     }
@@ -99,39 +99,75 @@ class App extends Component {
   };
 
   send_current_action = () => {
+    /* updates. put modal type(s) into a switch. 
 
+    */
     const { current_action, modal_type, current_card, transaction_timestamp } = this.state;
-    
-    if(modal_type === 'new_customer'){
-
-      this.setState(prevState => ({
-        customers: [...prevState.customers, current_action],
-        modal_class: 'modal_hide',
-        current_customer: current_action
-      }));
-    }
-
-    if(modal_type === 'new_transaction'){
-      let timestamp = new Date (transaction_timestamp);
-      
-      if(!transaction_validation(current_action, current_card)){
-        return;
-      }
-        current_action.transaction_timestamp = timestamp;
-        current_action.card_id = current_card.id;
-        current_action.current_balance = current_card.current_balance;
-        current_action.transaction_approved = true;
-       // update state with new transaction data
+    // this.setState({modal_class: 'modal_hide'})
+    switch(modal_type){
+      case 'new_customer':
         this.setState(prevState => ({
-          trans_history: [current_action, ...prevState.trans_history],
+          customers: [...prevState.customers, current_action],
           modal_class: 'modal_hide',
-          current_card: {...current_card,
-            current_balance: (current_action.transaction_type === 'payment') ?
-            current_card.current_balance - parseFloat(current_action.transaction_amount) :
-            current_card.current_balance + parseFloat(current_action.transaction_amount)
-          }
-        }))
-      }
+          current_customer: current_action
+        })); 
+        break;
+      case 'new_card':
+        break; 
+      case 'new_transaction':
+        let timestamp = new Date(transaction_timestamp);
+        
+        // if(!transaction_validation(current_action, current_card)){
+        //   return;
+        // }
+          current_action.transaction_timestamp = timestamp;
+          current_action.card_id = current_card.id;
+          current_action.current_balance = current_card.current_balance;
+          current_action.transaction_approved = true;
+        // update state with new transaction data
+          this.setState(prevState => ({
+            trans_history: [current_action, ...prevState.trans_history],
+            modal_class: 'modal_hide',
+            current_card: {...current_card,
+              current_balance: (current_action.transaction_type === 'payment') ?
+              current_card.current_balance - parseFloat(current_action.transaction_amount) :
+              current_card.current_balance + parseFloat(current_action.transaction_amount)
+            }
+          }))
+          break;
+      default:
+        this.setState({modal_class: 'modal_hide'});
+    }
+    // if(modal_type === 'new_customer'){
+
+    //   this.setState(prevState => ({
+    //     customers: [...prevState.customers, current_action],
+    //     modal_class: 'modal_hide',
+    //     current_customer: current_action
+    //   }));
+    // }
+
+    // if(modal_type === 'new_transaction'){
+    //   let timestamp = new Date(transaction_timestamp);
+      
+    //   if(!transaction_validation(current_action, current_card)){
+    //     return;
+    //   }
+    //     current_action.transaction_timestamp = timestamp;
+    //     current_action.card_id = current_card.id;
+    //     current_action.current_balance = current_card.current_balance;
+    //     current_action.transaction_approved = true;
+    //    // update state with new transaction data
+    //     this.setState(prevState => ({
+    //       trans_history: [current_action, ...prevState.trans_history],
+    //       modal_class: 'modal_hide',
+    //       current_card: {...current_card,
+    //         current_balance: (current_action.transaction_type === 'payment') ?
+    //         current_card.current_balance - parseFloat(current_action.transaction_amount) :
+    //         current_card.current_balance + parseFloat(current_action.transaction_amount)
+    //       }
+    //     }))
+    //   }
       //send current_action object to server 
       Axios.post('/currentAction', current_action)
       .catch(response => {console.log(response)})
@@ -215,7 +251,7 @@ class App extends Component {
           </Navbar>
           <Route  path='/modal'>
           <Modal className={modal_class} onClick={this.close_modal}> 
-            {/* {this.modal_render()} */}
+            {this.modal_render()}
           </Modal>
           </Route>
           <Sidebar>
