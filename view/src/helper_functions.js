@@ -1,7 +1,7 @@
 import { deflateSync } from "zlib";
 
 export const num_convert = num =>{
-
+// fn that validates / converts values
     let num_arr;
     if(num === null || num === undefined){ return }
     else if( num !== typeof(String)){
@@ -10,6 +10,7 @@ export const num_convert = num =>{
     else {
         num_arr = num.split('');
     } 
+
     let dot = num_arr.indexOf('.');
     let slicer = num_arr.slice(dot);
 

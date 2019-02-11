@@ -11,5 +11,5 @@ import { num_convert } from './helper_funciton.js';
 
 it('returns true', () => {
   let number = 455.32;
-  expect(num_convert(number)).toBe('45.32')
+  expect(num_convert(number)).toBe('45.32');
 })
